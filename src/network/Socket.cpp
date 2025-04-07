@@ -145,7 +145,15 @@ public:
   static std::unique_ptr<UDPSocket> createFromSocket(SOCKET_HANDLE sockfd) {
     return std::unique_ptr<UDPSocket>(new UDPSocket(sockfd));
   }
-
+  // Initialize Winsock on Windows (call this once at program startup)
+  static void InitWinsock() {
+    #ifdef _WIN32
+        WSADATA wsaData;
+        if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
+          throw std::runtime_error("WSAStartup failed");
+        }
+    #endif
+      }
 private:
   explicit UDPSocket(SOCKET_HANDLE sockfd) : sockfd_(sockfd) {}
   SOCKET_HANDLE sockfd_ = -1; // socket 文件描述符
