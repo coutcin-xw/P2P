@@ -8,6 +8,7 @@
 #pragma comment(lib, "ws2_32.lib")
 #else
 #include <unistd.h>
+#include <system_error> // 系统错误处理
 #endif
 namespace p2p
 {

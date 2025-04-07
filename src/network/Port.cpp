@@ -1,5 +1,4 @@
 #include "network/Port.hpp"
-#include <stdexcept>
 #include <arpa/inet.h> // inet_pton, inet_ntop
 
 namespace p2p

@@ -4,10 +4,11 @@
 #include "network/IPAddress.hpp"
 #include "network/Port.hpp"
 #include <memory>
-#include <system_error> // 系统错误处理
 #ifdef _WIN32
 #include <winsock2.h>
 #include <ws2tcpip.h>
+#include <BaseTsd.h>  // For SSIZE_T
+using ssize_t = SSIZE_T;
 #else
 #include <sys/socket.h> // socket API
 #include <arpa/inet.h>
