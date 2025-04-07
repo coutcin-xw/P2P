@@ -5,8 +5,6 @@
 #include "network/Port.hpp"
 #include <memory>
 #ifdef _WIN32
-#include <winsock2.h>
-#include <ws2tcpip.h>
 #include <BaseTsd.h>
 using ssize_t = SSIZE_T;
 #define SOCKET_HANDLE SOCKET

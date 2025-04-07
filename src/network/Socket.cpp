@@ -5,9 +5,8 @@
 #ifdef _WIN32
 #include <ws2tcpip.h>
 #pragma comment(lib, "ws2_32.lib")
-#else
-#include <system_error> // 系统错误处理
 #endif
+#include <system_error> // 系统错误处理
 namespace p2p {
 
 /* UDP Socket 实现 */
@@ -143,7 +142,7 @@ public:
 
     return nullptr;
   }
-  static std::unique_ptr<UDPSocket> createFromSocket(int sockfd) {
+  static std::unique_ptr<UDPSocket> createFromSocket(SOCKET_HANDLE sockfd) {
     return std::unique_ptr<UDPSocket>(new UDPSocket(sockfd));
   }
 
@@ -295,7 +294,7 @@ public:
 
     return nullptr;
   }
-  static std::unique_ptr<TCPSocket> createFromSocket(int sockfd) {
+  static std::unique_ptr<TCPSocket> createFromSocket(SOCKET_HANDLE sockfd) {
     return std::unique_ptr<TCPSocket>(new TCPSocket(sockfd));
   }
 

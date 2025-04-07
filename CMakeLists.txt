@@ -30,7 +30,11 @@ link_directories(
     ${HOME}/deps
     # 添加其他库目录
 )
-
+if(WIN32)
+    list(APPEND EXTRA_LIBS Ws2_32)
+    include_directories("$ENV{WindowsSdkDir}Include/$ENV{WindowsSDKVersion}shared")
+    include_directories("$ENV{WindowsSdkDir}Include/$ENV{WindowsSDKVersion}um")
+endif()
 
 # 包含子目录
 add_subdirectory(${HOME}/src/network)
