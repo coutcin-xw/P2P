@@ -6,21 +6,30 @@
 #include <vector>
 #include <cstdint>
 #include <memory>
+#ifdef _WIN32
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#pragma comment(lib, "ws2_32.lib")
+// Windows uses in_addr and in6_addr from ws2tcpip.h
+#else
 #include <sys/socket.h>
 #include <arpa/inet.h>
+// Unix-like systems use in_addr and in6_addr from arpa/inet.h
+#endif
+
 
 namespace p2p
 {
     /**
-     * @brief IP地址抽象基类
+     * @brief IP address abstract base class
      */
     class IIPAddress
     {
     public:
         virtual ~IIPAddress() = default;
-        virtual std::vector<uint8_t> getIP() const noexcept = 0; // 获取二进制格式的IP地址
-        virtual std::string getIPString() const noexcept = 0;    // 获取字符串格式的IP地址
-        virtual bool isIPv6() const noexcept = 0;                // 判断是否为IPv6
+        virtual std::vector<uint8_t> getIP() const noexcept = 0;
+        virtual std::string getIPString() const noexcept = 0;
+        virtual bool isIPv6() const noexcept = 0;
     };
 
     /**

@@ -1,5 +1,9 @@
 #include "network/Port.hpp"
+#ifdef _WIN32
+#include <winsock2.h>
+#else
 #include <arpa/inet.h> // inet_pton, inet_ntop
+#endif
 
 namespace p2p
 {

@@ -1,8 +1,6 @@
 #include "network/Address.hpp"
 #include "network/IPAddress.hpp"
 #include "network/Port.hpp"
-#include <stdexcept>
-#include <memory>
 
 namespace p2p
 {

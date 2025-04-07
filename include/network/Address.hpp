@@ -4,7 +4,14 @@
 #include "network/IPAddress.hpp"
 #include "Port.hpp"
 #include <memory>
+#include <string>
+
+#ifdef _WIN32
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#else
 #include <sys/socket.h>
+#endif
 
 namespace p2p
 {
@@ -15,9 +22,9 @@ namespace p2p
     {
     public:
         virtual ~IAddress() = default;
-        virtual const IIPAddress &getIPAddress() const noexcept = 0; // 获取IP地址
-        virtual const Port &getPort() const noexcept = 0;            // 获取端口
-        virtual std::string toString() const = 0;                   // 转换为可读字符串
+        virtual const IIPAddress &getIPAddress() const noexcept = 0;
+        virtual const Port &getPort() const noexcept = 0;
+        virtual std::string toString() const = 0;
     };
 
     /**
@@ -45,5 +52,4 @@ namespace p2p
     std::unique_ptr<IAddress> CreateAddress(const std::string &ip, uint16_t port);
 } // namespace p2p
 
-
-#endif // INCLUDE_ADDRESS_HPP_
+#endif // INCLUDE_NETWORK_ADDRESS_HPP_
