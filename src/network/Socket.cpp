@@ -102,7 +102,7 @@ public:
     return ret;
   }
 
-  int getNativeHandle() const noexcept override { return sockfd_; }
+  SOCKET_HANDLE getNativeHandle() const noexcept override { return sockfd_; }
 
   std::unique_ptr<IIPAddress> getLocalIPAddress() const noexcept override {
     sockaddr_storage addr;
@@ -274,7 +274,7 @@ public:
     return ::recv(sockfd_, reinterpret_cast<char *>(buf), len, 0);
   }
 
-  int getNativeHandle() const noexcept override { return sockfd_; }
+  SOCKET_HANDLE getNativeHandle() const noexcept override { return sockfd_; }
 
   std::unique_ptr<IIPAddress> getLocalIPAddress() const noexcept override {
     sockaddr_storage addr;
