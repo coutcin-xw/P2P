@@ -7,7 +7,6 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <random>
-#include <iomanip>
 #pragma pack(push, 1)
 struct StunHeader {
     uint16_t type;
@@ -20,7 +19,7 @@ struct StunAttr {
     uint16_t length;
 };
 #pragma pack(pop)
-class StunClient {
+class StunMessage {
 public:
     StunClient() : sockfd(-1) {}
     
@@ -103,30 +102,14 @@ private:
         return false;
     }
 };
-
-enum StunMessageClass {
-    REQUEST         = 0b00,
-    INDICATION      = 0b01,
-    SUCCESS_RESPONSE= 0b10,
-    ERROR_RESPONSE  = 0b11
-};
-enum StunMessageMethod {
-    BINDING         = 0x001,
-};
-enum STUNBindingType {
-    BINDING_REQUEST          = (StunMessageMethod::BINDING & 0x0FFF) | (((StunMessageClass::REQUEST & 0x002) << 7)|((StunMessageClass::REQUEST & 0x001) << 4)),          // 0x0001
-    BINDING_INDICATION       = (StunMessageMethod::BINDING & 0x0FFF) | (((StunMessageClass::INDICATION & 0x002) << 7)|((StunMessageClass::INDICATION & 0x001) << 4)),      // 0x0011
-    BINDING_SUCCESS_RESPONSE = (StunMessageMethod::BINDING & 0x0FFF) | (((StunMessageClass::SUCCESS_RESPONSE & 0x002) << 7)|((StunMessageClass::SUCCESS_RESPONSE & 0x001) << 4)),// 0x0101
-    BINDING_ERROR_RESPONSE   = (StunMessageMethod::BINDING & 0x0FFF) | (((StunMessageClass::ERROR_RESPONSE & 0x002) << 7)|((StunMessageClass::ERROR_RESPONSE & 0x001) << 4)),    // 0x0111
-};
 // 使用示例
 int main() {
-    int BINDING = 0x001;
-    int REQUEST = 0b01;
-    std::cout<<std::hex<< STUNBindingType::BINDING_REQUEST<<std::endl;
-    std::cout<<std::hex<< STUNBindingType::BINDING_INDICATION<<std::endl;
-    std::cout<<std::hex<< STUNBindingType::BINDING_SUCCESS_RESPONSE<<std::endl;
-    std::cout<<std::hex<< STUNBindingType::BINDING_ERROR_RESPONSE<<std::endl;
+    StunClient client;
+    if(client.get_nat_mapping("111.206.174.2", 3478)) {
+        std::cout << "NAT mapping成功获取" << std::endl;
+    } else {
+        std::cerr << "查询失败" << std::endl;
+    }
     return 0;
 }
 

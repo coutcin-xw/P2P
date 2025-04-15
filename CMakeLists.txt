@@ -83,6 +83,6 @@ target_link_libraries(${PROJECT_NAME}
 # 如果存在单元测试目录，可以在这里添加测试
 # if(EXISTS ${CMAKE_SOURCE_DIR}/unittest)
 #     enable_testing()
-#     add_subdirectory(unittest)
+#     add_subdirectory(test)
 # endif()
 message(STATUS "Configuration completed----------")
