@@ -75,7 +75,7 @@ private:
             StunAttr* attr = reinterpret_cast<StunAttr*>(buffer + pos);
             uint16_t attr_type = ntohs(attr->type);
             uint16_t attr_len = ntohs(attr->length);
-            if(attr_type == 0x0020) { // XOR-MAPPED-ADDRESS
+            if(attr_type == 0x0001) { // XOR-MAPPED-ADDRESS
                 uint8_t* value = buffer + pos + 4;
                 
                 // 验证属性长度（IPv4应为8字节）
@@ -121,12 +121,12 @@ enum STUNBindingType {
 };
 // 使用示例
 int main() {
-    int BINDING = 0x001;
-    int REQUEST = 0b01;
-    std::cout<<std::hex<< STUNBindingType::BINDING_REQUEST<<std::endl;
-    std::cout<<std::hex<< STUNBindingType::BINDING_INDICATION<<std::endl;
-    std::cout<<std::hex<< STUNBindingType::BINDING_SUCCESS_RESPONSE<<std::endl;
-    std::cout<<std::hex<< STUNBindingType::BINDING_ERROR_RESPONSE<<std::endl;
+    StunClient client;
+    if(client.get_nat_mapping("111.206.174.2", 3478)) {
+        std::cout << "NAT mapping成功获取" << std::endl;
+    } else {
+        std::cerr << "查询失败" << std::endl;
+    }
     return 0;
 }
 
