@@ -8,6 +8,7 @@
 #include <unistd.h>
 #include <random>
 #include <iomanip>
+#include "nat/Stun.h"
 #pragma pack(push, 1)
 struct StunHeader {
     uint16_t type;
@@ -121,12 +122,13 @@ enum STUNBindingType {
 };
 // 使用示例
 int main() {
-    StunClient client;
-    if(client.get_nat_mapping("111.206.174.2", 3478)) {
-        std::cout << "NAT mapping成功获取" << std::endl;
-    } else {
-        std::cerr << "查询失败" << std::endl;
-    }
+    // StunClient client;
+    // if(client.get_nat_mapping("111.206.174.2", 3478)) {
+    //     std::cout << "NAT mapping成功获取" << std::endl;
+    // } else {
+    //     std::cerr << "查询失败" << std::endl;
+    // }
+    p2p::nat::Stun stun;
     return 0;
 }
 

@@ -6,12 +6,14 @@
 #include <iostream>
 #include <cstdint>
 #include <cstring>
+#include <memory>
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <random>
 #include <unordered_map>
 #include "network/Address.hpp"
+#include "network/Socket.hpp"
 /*
 
 STUN消息结构
@@ -95,13 +97,19 @@ namespace p2p {
             XOR_MAPPED_ADDRESS  = 0x0020,  //异或加密的公网地址（取代MAPPED-ADDRESS）
             SOFTWARE            = 0x0022,  //客户端/服务端软件标识（如"ExampleStunServer v1.0"） 
             FINGERPRINT         = 0x8028,  //消息尾部的CRC32校验码（用于兼容性检测）
-        }
+        };
         class Stun {
         public:
-            virtual std::unordered_map<std::string, Address>
-        
+            Stun(){
+                sockfd_ = p2p::CreateUDPSocket(false); // 创建 IPv4 UDP Socket
+                // std::cout<<sockfd_->getNativeHandle()<<std::endl;
+            };
+            std::unique_ptr<IAddress> get_nat_mapping(std::unique_ptr<p2p::IAddress> stun_server);
+
         private:
-            int sockfd_;
+            std::unique_ptr<IAddress> parse_response(uint8_t* buffer, size_t len);
+            void generate_transaction_id(uint8_t* tid);
+            std::unique_ptr<IUDPSocket> sockfd_;
         };
     }
     

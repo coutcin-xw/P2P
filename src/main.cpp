@@ -1,11 +1,14 @@
-#include "network/Socket.hpp"
-#include "network/IPAddress.hpp"
-#include "network/Port.hpp"
-#include <iostream>
+// #include "network/Socket.hpp"
+// #include "network/IPAddress.hpp"
+// #include "network/Port.hpp"
+// #include <iostream>
+#include "nat/Stun.h"
 #include <cstring>
 
 int main()
 {
+    p2p::nat::Stun stun;
+    stun.get_nat_mapping(p2p::CreateAddress("111.206.174.2", 3478));
     // try
     // {
     //     // 创建 UDP Socket
@@ -102,82 +105,82 @@ int main()
     //     std::cerr << "Error: " << e.what() << std::endl;
     //     return 1;
     // }
-    try
-    {
-        // 创建 TCP Socket
-        auto socket = p2p::CreateTCPSocket(false); // 创建 IPv4 TCP Socket
+    // try
+    // {
+    //     // 创建 TCP Socket
+    //     auto socket = p2p::CreateTCPSocket(false); // 创建 IPv4 TCP Socket
 
-        // 创建服务器 IP 地址和端口
-        auto serverIpAddress = p2p::CreateIPAddress("0.0.0.0"); // 监听所有网络接口
-        p2p::Port serverPort(1234); // 监听端口 1234
+    //     // 创建服务器 IP 地址和端口
+    //     auto serverIpAddress = p2p::CreateIPAddress("0.0.0.0"); // 监听所有网络接口
+    //     p2p::Port serverPort(1234); // 监听端口 1234
 
-        // 绑定到指定地址
-        if (!socket->bind(*serverIpAddress, serverPort))
-        {
-            std::cerr << "Failed to bind to address!" << std::endl;
-            return 1;
-        }
+    //     // 绑定到指定地址
+    //     if (!socket->bind(*serverIpAddress, serverPort))
+    //     {
+    //         std::cerr << "Failed to bind to address!" << std::endl;
+    //         return 1;
+    //     }
 
-        // 开始监听连接
-        if (!socket->listen(5)) // 设置 backlog 为 5
-        {
-            std::cerr << "Failed to listen on socket!" << std::endl;
-            return 1;
-        }
+    //     // 开始监听连接
+    //     if (!socket->listen(5)) // 设置 backlog 为 5
+    //     {
+    //         std::cerr << "Failed to listen on socket!" << std::endl;
+    //         return 1;
+    //     }
 
-        std::cout << "Listening on TCP port 1234..." << std::endl;
+    //     std::cout << "Listening on TCP port 1234..." << std::endl;
 
-        // 接受客户端连接
-        while (true)
-        {
-            std::unique_ptr<p2p::IIPAddress> clientIpAddress;
-            std::unique_ptr<p2p::Port> clientPort;
+    //     // 接受客户端连接
+    //     while (true)
+    //     {
+    //         std::unique_ptr<p2p::IIPAddress> clientIpAddress;
+    //         std::unique_ptr<p2p::Port> clientPort;
 
-            // 接受连接
-            auto clientSocket = socket->accept(clientIpAddress, clientPort);
+    //         // 接受连接
+    //         auto clientSocket = socket->accept(clientIpAddress, clientPort);
 
-            if (clientSocket)
-            {
-                std::cout << "Accepted connection from "
-                          << clientIpAddress->getIPString() << ":" << clientPort->getPort() << std::endl;
+    //         if (clientSocket)
+    //         {
+    //             std::cout << "Accepted connection from "
+    //                       << clientIpAddress->getIPString() << ":" << clientPort->getPort() << std::endl;
 
-                // 接收客户端发送的数据
-                char buffer[1024];
-                ssize_t recvLen = clientSocket->recv(buffer, sizeof(buffer));
+    //             // 接收客户端发送的数据
+    //             char buffer[1024];
+    //             ssize_t recvLen = clientSocket->recv(buffer, sizeof(buffer));
 
-                if (recvLen > 0)
-                {
-                    buffer[recvLen] = '\0'; // 确保字符串以 null 结尾
-                    std::cout << "Received " << recvLen << " bytes from client: " << buffer << std::endl;
+    //             if (recvLen > 0)
+    //             {
+    //                 buffer[recvLen] = '\0'; // 确保字符串以 null 结尾
+    //                 std::cout << "Received " << recvLen << " bytes from client: " << buffer << std::endl;
 
-                    // 发送响应给客户端
-                    const char* response = "Hello, Client!";
-                    ssize_t sentLen = clientSocket->send(response, strlen(response));
+    //                 // 发送响应给客户端
+    //                 const char* response = "Hello, Client!";
+    //                 ssize_t sentLen = clientSocket->send(response, strlen(response));
 
-                    if (sentLen < 0)
-                    {
-                        std::cerr << "Failed to send data to client!" << std::endl;
-                    }
-                    else
-                    {
-                        std::cout << "Sent " << sentLen << " bytes to client: " << response << std::endl;
-                    }
-                }
-                else
-                {
-                    std::cerr << "Failed to receive data from client!" << std::endl;
-                }
-            }
-            else
-            {
-                std::cerr << "Failed to accept client connection!" << std::endl;
-            }
-        }
-    }
-    catch (const std::exception &e)
-    {
-        std::cerr << "Error: " << e.what() << std::endl;
-        return 1;
-    }
+    //                 if (sentLen < 0)
+    //                 {
+    //                     std::cerr << "Failed to send data to client!" << std::endl;
+    //                 }
+    //                 else
+    //                 {
+    //                     std::cout << "Sent " << sentLen << " bytes to client: " << response << std::endl;
+    //                 }
+    //             }
+    //             else
+    //             {
+    //                 std::cerr << "Failed to receive data from client!" << std::endl;
+    //             }
+    //         }
+    //         else
+    //         {
+    //             std::cerr << "Failed to accept client connection!" << std::endl;
+    //         }
+    //     }
+    // }
+    // catch (const std::exception &e)
+    // {
+    //     std::cerr << "Error: " << e.what() << std::endl;
+    //     return 1;
+    // }
     return 0;
 }

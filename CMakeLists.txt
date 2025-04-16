@@ -38,7 +38,9 @@ endif()
 
 # 包含子目录
 add_subdirectory(${HOME}/src/network)
+add_subdirectory(${HOME}/src/nat)
 list(APPEND EXTRA_LIBS Network)
+list(APPEND EXTRA_LIBS Nat)
 # add_subdirectory(${HOME}/src/nat)
 # list(APPEND EXTRA_LIBS Nat)
 # add_subdirectory(${HOME}/src/p2p)

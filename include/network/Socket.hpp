@@ -33,6 +33,7 @@ namespace p2p
     public:
         virtual ~ISocket() = default;
         virtual bool bind(const IIPAddress &ipAddress, const Port &port) = 0;
+        virtual SOCKET_HANDLE getNativeHandle() const noexcept = 0;
     };
     class IUDPSocket : virtual public ISocket
     {
@@ -40,7 +41,7 @@ namespace p2p
         virtual ~IUDPSocket() = default;
         virtual ssize_t sendTo(const void *buf, size_t len, const IIPAddress &ipAddress, const Port &port) = 0;
         virtual ssize_t recvFrom(void *buf, size_t len, std::unique_ptr<IIPAddress> &srcIpAddress, std::unique_ptr<Port> &srcPort) = 0;
-        virtual SOCKET_HANDLE getNativeHandle() const noexcept = 0;
+        
         virtual std::unique_ptr<IIPAddress> getLocalIPAddress() const noexcept = 0;
         virtual std::unique_ptr<Port> getLocalPort() const noexcept = 0;
     };
@@ -54,7 +55,6 @@ namespace p2p
         virtual bool connect(const IIPAddress &ipAddress, const Port &port) = 0;
         virtual ssize_t send(const void *buf, size_t len) = 0;
         virtual ssize_t recv(void *buf, size_t len) = 0;
-        virtual SOCKET_HANDLE getNativeHandle() const noexcept = 0;
         virtual std::unique_ptr<IIPAddress> getLocalIPAddress() const noexcept = 0;
         virtual std::unique_ptr<Port> getLocalPort() const noexcept = 0;
     };
