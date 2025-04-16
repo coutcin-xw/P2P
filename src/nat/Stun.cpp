@@ -40,10 +40,12 @@ p2p::nat::Stun::get_nat_mapping(std::unique_ptr<p2p::IAddress> stun_server) {
   }
 }
 
-std::unique_ptr<p2p::IAddress> p2p::nat::Stun::parse_response(uint8_t *buffer, size_t len) {
+std::unique_ptr<p2p::IAddress> p2p::nat::Stun::parse_response(uint8_t *buffer,
+                                                              size_t len) {
   p2p::nat::StunHeader *header =
       reinterpret_cast<p2p::nat::StunHeader *>(buffer);
-  if (ntohs(header->type) != p2p::nat::StunBindingType::BINDING_SUCCESS_RESPONSE)
+  if (ntohs(header->type) !=
+      p2p::nat::StunBindingType::BINDING_SUCCESS_RESPONSE)
     return nullptr; // 检查是否为Binding Response
   size_t pos = sizeof(p2p::nat::StunHeader);
   while (pos < len) {
@@ -51,8 +53,8 @@ std::unique_ptr<p2p::IAddress> p2p::nat::Stun::parse_response(uint8_t *buffer, s
         reinterpret_cast<p2p::nat::StunAttr *>(buffer + pos);
     uint16_t attr_type = ntohs(attr->type);
     uint16_t attr_len = ntohs(attr->length);
-    if (attr_type ==
-        p2p::nat::StunAttributesType::XOR_MAPPED_ADDRESS) { // XOR-MAPPED-ADDRESS
+    if (attr_type == p2p::nat::StunAttributesType::
+                         XOR_MAPPED_ADDRESS) { // XOR-MAPPED-ADDRESS
       uint8_t *value = buffer + pos + 4;
       // 验证属性长度（IPv4应为8字节）
       if (attr_len < 8)
@@ -72,9 +74,10 @@ std::unique_ptr<p2p::IAddress> p2p::nat::Stun::parse_response(uint8_t *buffer, s
       // 输出结果
       struct in_addr addr;
       addr.s_addr = htonl(ip);
+#ifdef __DEBUG__
       std::cout << "Public IP: " << inet_ntoa(addr) << "\nPort: " << port
                 << std::endl;
-
+#endif
       return p2p::CreateAddress(std::string(inet_ntoa(addr)), port);
     }
     pos += 4 + attr_len + (attr_len % 4 ? 4 - attr_len % 4 : 0);
